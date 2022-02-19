@@ -153,13 +153,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Include\WordleAgent\Agent.h" />
     <ClInclude Include="Include\WordleAgent\AgentFactory.h" />
     <ClInclude Include="Include\WordleAgent\framework.h" />
     <ClInclude Include="Include\WordleAgent\Game.h" />
+    <ClInclude Include="Include\WordleAgent\OutputHelper.h" />
+    <ClInclude Include="Include\WordleAgent\Timer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Game.cpp" />
+    <ClCompile Include="Source\OutputHelper.cpp" />
+    <ClCompile Include="Source\Timer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
