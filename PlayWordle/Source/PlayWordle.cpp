@@ -4,6 +4,7 @@
 #include "WordleAgent/AgentFactory.h"
 #include "WordleAgent/AgentFactoryDll.h"
 #include "WordleAgent/Game.h"
+#include "WordleAgent/Random.h"
 #include "WordleAgent/OutputHelper.h"
 #include <iostream>
 #include <stdexcept>
@@ -27,10 +28,11 @@ int main()
     try
     {
         agent_factory = AgentFactoryDll::LoadPlugin("..\\x64\\Debug\\RandomAgent.dll");
+        //agent_factory = AgentFactoryDll::LoadPlugin("..\\x64\\Release\\RandomAgent.dll");
     }
     catch (std::exception e)
     {
-        std::cout << "ERROR: " << e.what() << std::endl;
+        std::cout << "### ERROR ### " << e.what() << std::endl;
         return -1;
     }
 
@@ -52,23 +54,19 @@ int main()
 
     std::cout << "=======" << std::endl;
 
-    game.ProcessGuess("AGENT");
-    PrintGuessResultAndLetters(game.GetGameTable().back(), game.GetGameLetters());
-
-    game.ProcessGuess("DEBUG");
-    PrintGuessResultAndLetters(game.GetGameTable().back(), game.GetGameLetters());
-
-    game.ProcessGuess("DREAM");
-    PrintGuessResultAndLetters(game.GetGameTable().back(), game.GetGameLetters());
-
-    game.ProcessGuess("PUPIL");
-    PrintGuessResultAndLetters(game.GetGameTable().back(), game.GetGameLetters());
-
-    game.ProcessGuess("DRILL");
-    PrintGuessResultAndLetters(game.GetGameTable().back(), game.GetGameLetters());
-
-    game.ProcessGuess("PILOT");
-    PrintGuessResultAndLetters(game.GetGameTable().back(), game.GetGameLetters());
+    while (!game.IsGameOver())
+    {
+        try
+        {
+            game.ProcessGuess(agent->GetNextGuess());
+        }
+        catch (std::exception e)
+        {
+            std::cout << "### ERROR ### " << e.what() << std::endl;
+            return -1;
+        }
+        PrintGuessResultAndLetters(game.GetGameTable().back(), game.GetGameLetters());
+    }
 
     std::cout << "=======" << std::endl;
     std::cout << std::endl;

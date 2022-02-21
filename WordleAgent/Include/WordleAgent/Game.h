@@ -87,6 +87,11 @@ public:
 
     std::string GetSolution() const;
 
+    const WordList& GetWordList() const
+    {
+        return m_word_list;
+    }
+
     const GameTable& GetGameTable() const
     {
         return m_game_table;

@@ -36,6 +36,9 @@
     <ClInclude Include="Include\WordleAgent\AgentFactoryDll.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\WordleAgent\Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -48,6 +51,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\AgentFactoryDll.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Random.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,4 +1,4 @@
-
+#pragma once
 #include "WordleAgent/framework.h"
 #include "WordleAgent/AgentFactory.h"
 
