@@ -43,14 +43,14 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -155,12 +155,14 @@
   <ItemGroup>
     <ClInclude Include="Include\WordleAgent\Agent.h" />
     <ClInclude Include="Include\WordleAgent\AgentFactory.h" />
+    <ClInclude Include="Include\WordleAgent\AgentFactoryDll.h" />
     <ClInclude Include="Include\WordleAgent\framework.h" />
     <ClInclude Include="Include\WordleAgent\Game.h" />
     <ClInclude Include="Include\WordleAgent\OutputHelper.h" />
     <ClInclude Include="Include\WordleAgent\Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\AgentFactoryDll.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\OutputHelper.cpp" />
     <ClCompile Include="Source\Timer.cpp" />

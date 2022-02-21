@@ -1,5 +1,6 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "framework.h"
+#include "MyAgentFactory.h"
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
@@ -17,3 +18,10 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     return TRUE;
 }
 
+extern "C"
+{
+    __declspec(dllexport) MyAgentFactory* __stdcall DllGetAgentFactory()
+    {
+        return new MyAgentFactory();
+    }
+}

@@ -1,8 +1,12 @@
 
+#include "framework.h"
 #include "WordleAgent/Agent.h"
+#include "WordleAgent/AgentFactory.h"
+#include "WordleAgent/AgentFactoryDll.h"
 #include "WordleAgent/Game.h"
 #include "WordleAgent/OutputHelper.h"
 #include <iostream>
+#include <stdexcept>
 
 namespace
 {
@@ -19,6 +23,17 @@ namespace
 
 int main()
 {
+    std::unique_ptr<AgentFactory> agent_factory;
+    try
+    {
+        agent_factory = AgentFactoryDll::LoadPlugin("..\\x64\\Debug\\RandomAgent.dll");
+    }
+    catch (std::exception e)
+    {
+        std::cout << "ERROR: " << e.what() << std::endl;
+        return -1;
+    }
+
     WordList word_list;
     word_list.push_back("SKILL");
     word_list.push_back("DRILL");
@@ -32,6 +47,8 @@ int main()
     word_list.push_back("AGENT");
 
     Game game("PILOT", 6, 300.0, 30.0, word_list);
+
+    auto agent = agent_factory->CreateAgent(game);
 
     std::cout << "=======" << std::endl;
 

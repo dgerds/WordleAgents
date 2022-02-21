@@ -12,6 +12,6 @@ public:
     // note that this method must return within the games "agent initialisation timelimit" to void disqualification.
     virtual std::unique_ptr<Agent> CreateAgent(Game& game) const
     {
-        return std::make_unique<Agent>(new MyAgent(game));
+        return std::make_unique<MyAgent>(game);
     }
 };
