@@ -73,17 +73,17 @@ GuessResult::GuessResult(const std::string& guess, const std::string& solution)
 // constructor
 Game::Game(const std::string& solution,
 		   int num_guesses,
-		   double agent_initialisation_timelimit,
-		   double agent_guess_timelimit,
+		   double agent_initialisation_timelimit_ms,
+		   double agent_guess_timelimit_ms,
 		   const WordList& word_list)
   : m_game_solved(false),
 	m_game_over_message(),
 	m_solution(ToUpperCopy(solution)),
 	m_num_guesses(num_guesses),
-	m_agent_initialisation_timelimit(agent_initialisation_timelimit),
-	m_agent_guess_timelimit(agent_guess_timelimit),
-	m_game_start_time(0.0),
-	m_game_end_time(0.0),
+	m_agent_initialisation_timelimit_ms(agent_initialisation_timelimit_ms),
+	m_agent_guess_timelimit_ms(agent_guess_timelimit_ms),
+	m_game_start_time_ms(0.0),
+	m_game_end_time_ms(0.0),
 	m_word_list(word_list),
 	m_timer()
 {
@@ -95,18 +95,18 @@ Game::Game(const std::string& solution,
 }
 
 
-// get the game time in seconds
-double Game::GetGameTime() const
+// get the game time in milliseconds
+double Game::GetGameTimeMs() const
 {
 	if (IsGameStated())
 	{
 		if (IsGameOver())
 		{
-			return m_game_end_time;
+			return m_game_end_time_ms;
 		}
 		else
 		{
-			return m_timer.GetCurrentTime() - m_game_start_time;
+			return m_timer.GetCurrentTimeMs() - m_game_start_time_ms;
 		}
 	}
 	else
@@ -142,7 +142,7 @@ bool Game::ProcessGuess(std::string guess)
 	// if the same has not started yet, then start the game
 	if (!IsGameStated())
 	{		
-		m_game_start_time = m_timer.GetCurrentTime();
+		m_game_start_time_ms = m_timer.GetCurrentTimeMs();
 	}
 
 	// add the guess to the list
@@ -176,7 +176,7 @@ void Game::EndGame(const std::string& game_over_message)
 {
 	if (!IsGameOver())
 	{		
-		m_game_end_time = GetGameTime();
+		m_game_end_time_ms = GetGameTimeMs();
 		m_game_over_message = game_over_message;
 	}
 }

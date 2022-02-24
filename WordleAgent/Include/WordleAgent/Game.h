@@ -38,13 +38,13 @@ public:
     // constructor
     Game(const std::string& solution,
          int num_guesses,
-         double agent_initialisation_timelimit,
-         double agent_guess_timelimit,
+         double agent_initialisation_timelimit_ms,
+         double agent_guess_timelimit_ms,
          const WordList& word_list);
 
     bool IsGameStated() const
     {
-        return m_game_start_time > 0.0;
+        return m_game_start_time_ms > 0.0;
     }
 
     bool IsGameSolved() const
@@ -54,7 +54,7 @@ public:
 
     bool IsGameOver() const
     {
-        return m_game_end_time > 0.0;
+        return m_game_end_time_ms > 0.0;
     }    
 
     const std::string& GetGameOverMessage() const
@@ -62,18 +62,18 @@ public:
         return m_game_over_message;
     }    
 
-    double GetAgentInitialisationTimelimit() const
+    double GetAgentInitialisationTimelimitMs() const
     {
-        return m_agent_initialisation_timelimit;
+        return m_agent_initialisation_timelimit_ms;
     }
 
-    double GetAgentGuessTimelimit() const
+    double GetAgentGuessTimelimitMs() const
     {
-        return m_agent_guess_timelimit;
+        return m_agent_guess_timelimit_ms;
     }
 
-    // get the game time in seconds
-    double GetGameTime() const;
+    // get the game time in milliseconds
+    double GetGameTimeMs() const;
 
     int GetNumGuesses() const
     {
@@ -117,10 +117,10 @@ private:
     std::string m_game_over_message;
     std::string m_solution;
     int m_num_guesses;
-    double m_agent_initialisation_timelimit;
-    double m_agent_guess_timelimit;
-    double m_game_start_time;
-    double m_game_end_time;
+    double m_agent_initialisation_timelimit_ms;
+    double m_agent_guess_timelimit_ms;
+    double m_game_start_time_ms;
+    double m_game_end_time_ms;
     const WordList& m_word_list;
     GameTable m_game_table;
     GameLetters m_game_letters;

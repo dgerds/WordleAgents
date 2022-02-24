@@ -19,11 +19,11 @@ Timer::Timer()
 }
 
 
-// get the current time in seconds
-double Timer::GetCurrentTime() const
+// get the current time in milliseconds
+double Timer::GetCurrentTimeMs() const
 {
 	LARGE_INTEGER temp_count;
 	QueryPerformanceCounter(&temp_count);
-	return (temp_count.QuadPart / m_timer_freq);
+	return (temp_count.QuadPart / m_timer_freq) * 1000.0;
 }
 

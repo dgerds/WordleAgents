@@ -8,8 +8,8 @@ public:
     // constructor
 	Timer();
 
-    // get the current time in seconds
-    double GetCurrentTime() const;
+    // get the current time in milliseconds
+    double GetCurrentTimeMs() const;
 
 private:
 

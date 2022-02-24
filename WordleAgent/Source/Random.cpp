@@ -7,25 +7,18 @@
 
 namespace
 {
-    // automatically seed with a random time value at startup
-    int AutoSeedRandomness()
+    // seed the random number generator with a current time value
+    int SeedRandomness()
     {
-        auto t = Timer();
-        Random::SeedRandomness(static_cast<unsigned int>(t.GetCurrentTime() * 1000000));
+        srand(static_cast<unsigned int>(Timer().GetCurrentTimeMs() * 10000));
         return 0;
     }
-    int discard = AutoSeedRandomness();
-}
-
-
-void Random::SeedRandomness(unsigned int value)
-{
-    srand(value);
 }
 
 
 double Random::GetRandom(double low, double high)
 {
+    SeedRandomness();
     return low + ((((double)rand()) / (double)RAND_MAX) * (high - low));
 }
 
