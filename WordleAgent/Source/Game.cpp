@@ -145,6 +145,9 @@ bool Game::ProcessGuess(std::string guess)
 		m_game_start_time_ms = m_timer.GetCurrentTimeMs();
 	}
 
+	// sanity check the word is valid (ie: contained in the word list)
+	//TODO - if its not in the word list, then the player agent has missed this turn?
+
 	// add the guess to the list
 	m_game_table.push_back(GuessResult(guess, m_solution));
 

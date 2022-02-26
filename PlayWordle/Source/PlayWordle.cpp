@@ -15,12 +15,21 @@ namespace
     struct Args
     {
         Args(int num_games,
-            std::string plugin_filename)
-          : num_games(num_games),
-            plugin_filename(plugin_filename) {}
+            std::string plugin_filename,
+            std::vector<std::string> solution_list)
+            : num_games(num_games),
+              plugin_filename(plugin_filename),
+              solution_list(solution_list)
+        {
+            if ((!solution_list.empty()) && (solution_list.size() != num_games))
+            {
+                throw std::runtime_error("Number of games does not match the number of solutions provided on the command line");
+            }
+        }
 
         int num_games;
         std::string plugin_filename;
+        std::vector<std::string> solution_list;
     };
 
     void PrintGuessResultAndLetters(const GuessResult& gr, const GameLetters& gl)
@@ -43,19 +52,21 @@ namespace
     void PrintUsage()
     {        
         std::cout << std::endl;
-        std::cout << " Usage:    PlayWordle.exe num_games plugin_filename" << std::endl;
+        std::cout << " Usage:    PlayWordle.exe num_games plugin_filename [solution_1 solution_2 word_3 ... solution_n]" << std::endl;
         std::cout << std::endl;
         std::cout << " Example:  PlayWordle.exe 5 MyGame.dll" << std::endl;
+        std::cout << " Example:  PlayWordle.exe 3 MyGame.dll PILOT APPLE SKILL" << std::endl;
         std::cout << std::endl;
     }
 
     std::unique_ptr<Args> ParseArgs(int argc, char** argv)
     {
-        if (argc != 3)
+        std::vector<std::string> arg_vec(argv + 1, argv + argc);
+        if (arg_vec.size() < 2)
         {
             throw std::runtime_error("Incorrect number of command line arguments");
         }
-        return std::make_unique<Args>(std::stoi(argv[1]), argv[2]);
+        return std::make_unique<Args>(std::stoi(arg_vec[0]), arg_vec[1], std::vector<std::string>(arg_vec.begin() + 2, arg_vec.end()));
     }
 }
 
@@ -77,6 +88,26 @@ int main(int argc, char** argv)
         return -1;
     }
 
+    //
+    // TODO: get word list from disk
+    //
+
+    WordList word_list;
+    word_list.push_back("SKILL");
+    word_list.push_back("DRILL");
+    word_list.push_back("PUPIL");
+    word_list.push_back("PILOT");
+    word_list.push_back("IRATE");
+    word_list.push_back("APPLE");
+    word_list.push_back("PEACE");
+    word_list.push_back("DREAM");
+    word_list.push_back("DEBUG");
+    word_list.push_back("AGENT");
+
+    //
+    // TODO: sanity check all solutions provided are contained in the word list
+    //
+
     // load the player's custom agent factory
     std::unique_ptr<AgentFactory> agent_factory;
     try
@@ -92,18 +123,6 @@ int main(int argc, char** argv)
     std::cout << std::endl;
     std::cout << "--------------------------------------------------" << std::endl;
     std::cout << std::endl;
-
-    WordList word_list;
-    word_list.push_back("SKILL");
-    word_list.push_back("DRILL");
-    word_list.push_back("PUPIL");
-    word_list.push_back("PILOT");
-    word_list.push_back("IRATE");
-    word_list.push_back("APPLE");
-    word_list.push_back("PEACE");
-    word_list.push_back("DREAM");
-    word_list.push_back("DEBUG");
-    word_list.push_back("AGENT");
 
     std::vector<Game> game_list;
     for (int g = 0; g < args->num_games; g++)
