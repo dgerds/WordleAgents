@@ -6,31 +6,40 @@
 #include "WordleAgent/Game.h"
 #include "WordleAgent/Random.h"
 #include "WordleAgent/OutputHelper.h"
+#include "WordleAgent/CsvReader.h"
 #include <iostream>
 #include <stdexcept>
+#include <algorithm>
 
 namespace
 {
+    // transform the given string to uppercase
+    void ToUpper(std::string& str)
+    {
+        std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) { return std::toupper(c); });
+    }
+
     // define the command line arguments
     struct Args
     {
         Args(int num_games,
             std::string plugin_filename,
-            std::vector<std::string> solution_list)
+            std::vector<std::string> word_list)
             : num_games(num_games),
               plugin_filename(plugin_filename),
-              solution_list(solution_list)
+              solution_list(word_list)
         {
-            if ((!solution_list.empty()) && (solution_list.size() != num_games))
+            // ensure the solutions are in uppercase
+            for (auto& str : solution_list)
             {
-                throw std::runtime_error("Number of games does not match the number of solutions provided on the command line");
+                ToUpper(str);
             }
         }
 
         int num_games;
         std::string plugin_filename;
         std::vector<std::string> solution_list;
-    };
+    };    
 
     void PrintGuessResultAndLetters(const GuessResult& gr, const GameLetters& gl)
     {
@@ -52,7 +61,7 @@ namespace
     void PrintUsage()
     {        
         std::cout << std::endl;
-        std::cout << " Usage:    PlayWordle.exe num_games plugin_filename [solution_1 solution_2 word_3 ... solution_n]" << std::endl;
+        std::cout << " Usage:    PlayWordle.exe num_games plugin_filename [solution_1 solution_2 solution_3 ... solution_n]" << std::endl;
         std::cout << std::endl;
         std::cout << " Example:  PlayWordle.exe 5 MyGame.dll" << std::endl;
         std::cout << " Example:  PlayWordle.exe 3 MyGame.dll PILOT APPLE SKILL" << std::endl;
@@ -88,25 +97,35 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    //
-    // TODO: get word list from disk
-    //
-
-    WordList word_list;
-    word_list.push_back("SKILL");
-    word_list.push_back("DRILL");
-    word_list.push_back("PUPIL");
-    word_list.push_back("PILOT");
-    word_list.push_back("IRATE");
-    word_list.push_back("APPLE");
-    word_list.push_back("PEACE");
-    word_list.push_back("DREAM");
-    word_list.push_back("DEBUG");
-    word_list.push_back("AGENT");
-
-    //
-    // TODO: sanity check all solutions provided are contained in the word list
-    //
+    // load the word list from disk
+    std::vector<std::string> word_list;
+    try
+    {
+        // read the csv file
+        CsvReader csv_reader("wordlist5.csv");
+        // for each item, ensure its uppercase and add it to the word list
+        for (auto item : csv_reader.GetContent())
+        {
+            ToUpper(item);
+            word_list.push_back(item);
+        }
+    }
+    catch (std::exception e)
+    {
+        std::cout << "### ERROR ### " << e.what() << std::endl;
+        return -1;
+    }
+    std::cout << "Loaded word list: " << word_list.size() << std::endl;
+    
+    // sanity check any solutions provided on the command line are contained in the word list
+    for (auto& item : args->solution_list)
+    {
+        if (std::find(word_list.begin(), word_list.end(), item) == word_list.end())
+        {
+            std::cout << "### ERROR ### Solution provided on the command line is not in the word list: " << item << std::endl;
+            return -1;
+        }
+    }
 
     // load the player's custom agent factory
     std::unique_ptr<AgentFactory> agent_factory;
@@ -124,14 +143,34 @@ int main(int argc, char** argv)
     std::cout << "--------------------------------------------------" << std::endl;
     std::cout << std::endl;
 
+    Timer timer;
     std::vector<Game> game_list;
     for (int g = 0; g < args->num_games; g++)
     {
+        // pick the solution for the next game
+        std::string game_solution;
+        if (g < args->solution_list.size())
+        {
+            // from the command line arg list
+            game_solution = args->solution_list[g];
+        }
+        else
+        {
+            // pick a word at random from the word_list
+            game_solution = word_list[Random::GetRandomInt(0, static_cast<int>(word_list.size() - 1))];
+        }
+
         // create a new game
-        Game game = Game("PILOT", 6, 300.0, 30.0, word_list);
+        Game game = Game(game_solution, 6, 300.0, 30.0, word_list);
 
         // create a new player agent instance
+        auto start_time = timer.GetCurrentTimeMs();
         auto agent = agent_factory->CreateAgent(game);
+        if (timer.GetCurrentTimeMs() - start_time > game.GetAgentInitialisationTimelimitMs())
+        {
+            std::cout << "### GAME OVER ### Player agent constructor initialisation exceeded time limit of " << game.GetAgentInitialisationTimelimitMs() << " ms" << std::endl;
+            return -3;
+        }
 
         // print the game header
         std::cout << "Game #" << (g + 1) << std::endl;
@@ -143,12 +182,19 @@ int main(int argc, char** argv)
         {
             try
             {
+                // ask the agent to provide the next guess
+                start_time = timer.GetCurrentTimeMs();
                 game.ProcessGuess(agent->GetNextGuess());
+                if (timer.GetCurrentTimeMs() - start_time > game.GetAgentGuessTimelimitMs())
+                {
+                    std::cout << "### GAME OVER ### Player agent guess exceeded time limit of " << game.GetAgentGuessTimelimitMs() << " ms" << std::endl;
+                    return -4;
+                }
             }
             catch (std::exception e)
             {
                 std::cout << "### ERROR ### " << e.what() << std::endl;
-                return -1;
+                return -5;
             }
             PrintGuessResultAndLetters(game.GetGameTable().back(), game.GetGameLetters());
         }
@@ -156,8 +202,9 @@ int main(int argc, char** argv)
         // print the game footer stats
         std::cout << " =========" << std::endl;
         std::cout << std::endl;
-        std::cout << "Game result: " << game.GetGameOverMessage() << std::endl;
-        std::cout << "Game time: " << game.GetGameTimeMs() << " ms" << std::endl;
+        std::cout << "Game solution: " << game_solution << std::endl;
+        std::cout << "Game result:   " << game.GetGameOverMessage() << std::endl;
+        std::cout << "Game time:     " << game.GetGameTimeMs() << " ms" << std::endl;
         std::cout << std::endl;
         std::cout << "--------------------------------------------------" << std::endl;
         std::cout << std::endl;

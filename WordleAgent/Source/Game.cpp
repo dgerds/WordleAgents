@@ -116,16 +116,6 @@ double Game::GetGameTimeMs() const
 }
 
 
-std::string Game::GetSolution() const
-{
-	if (IsGameOver())
-	{
-		return m_solution;
-	}
-	throw std::runtime_error("Solution can only be revealed once the game is over");
-}
-
-
 // progress an agents guess.
 // returns true if the guess is correct, otherwise false
 bool Game::ProcessGuess(std::string guess)

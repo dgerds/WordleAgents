@@ -156,6 +156,7 @@
     <ClInclude Include="Include\WordleAgent\Agent.h" />
     <ClInclude Include="Include\WordleAgent\AgentFactory.h" />
     <ClInclude Include="Include\WordleAgent\AgentFactoryDll.h" />
+    <ClInclude Include="Include\WordleAgent\CsvReader.h" />
     <ClInclude Include="Include\WordleAgent\framework.h" />
     <ClInclude Include="Include\WordleAgent\Game.h" />
     <ClInclude Include="Include\WordleAgent\OutputHelper.h" />
@@ -164,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\AgentFactoryDll.cpp" />
+    <ClCompile Include="Source\CsvReader.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\OutputHelper.cpp" />
     <ClCompile Include="Source\Random.cpp" />

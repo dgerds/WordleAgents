@@ -39,6 +39,9 @@
     <ClInclude Include="Include\WordleAgent\Random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\WordleAgent\CsvReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Game.cpp">
@@ -54,6 +57,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CsvReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

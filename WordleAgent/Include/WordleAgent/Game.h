@@ -85,8 +85,6 @@ public:
         return static_cast<int>(m_game_table.size());
     }
 
-    std::string GetSolution() const;
-
     const WordList& GetWordList() const
     {
         return m_word_list;
