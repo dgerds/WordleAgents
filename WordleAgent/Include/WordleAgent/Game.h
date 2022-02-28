@@ -32,14 +32,15 @@ typedef std::map<char, Colour> GameLetters;
 typedef std::vector<std::string> WordList;
 
 
+typedef std::set<std::string> WordSet;
+
+
 class Game
 {
 public:
     // constructor
     Game(const std::string& solution,
          int num_guesses,
-         double agent_initialisation_timelimit_ms,
-         double agent_guess_timelimit_ms,
          const WordList& word_list);
 
     bool IsGameStated() const
@@ -62,16 +63,6 @@ public:
         return m_game_over_message;
     }    
 
-    double GetAgentInitialisationTimelimitMs() const
-    {
-        return m_agent_initialisation_timelimit_ms;
-    }
-
-    double GetAgentGuessTimelimitMs() const
-    {
-        return m_agent_guess_timelimit_ms;
-    }
-
     // get the game time in milliseconds
     double GetGameTimeMs() const;
 
@@ -90,6 +81,11 @@ public:
         return m_word_list;
     }
 
+    const WordSet& GetWordSet() const
+    {
+        return m_word_set;
+    }
+
     const GameTable& GetGameTable() const
     {
         return m_game_table;
@@ -98,6 +94,15 @@ public:
     const GameLetters& GetGameLetters() const
     {
         return m_game_letters;
+    }
+
+    const GuessResult* GetLastGuessResult() const
+    {
+        if (!m_game_table.empty())
+        {
+            return &m_game_table[m_game_table.size() - 1];
+        }
+        return 0;
     }
 
     // progress an agents guess.
@@ -109,17 +114,22 @@ public:
     // required to be public to handle corner cases like disqualification for taking too long.
     void EndGame(const std::string& game_over_message);
 
+    // transform the given string to uppercase
+    static void ToUpper(std::string& str);
+
+    // return a copy of the given string transformed to uppercase
+    static std::string ToUpperCopy(const std::string& str);
+
 private:
 
     bool m_game_solved;
     std::string m_game_over_message;
     std::string m_solution;
     int m_num_guesses;
-    double m_agent_initialisation_timelimit_ms;
-    double m_agent_guess_timelimit_ms;
     double m_game_start_time_ms;
     double m_game_end_time_ms;
     const WordList& m_word_list;
+    WordSet m_word_set;
     GameTable m_game_table;
     GameLetters m_game_letters;
     Timer m_timer;

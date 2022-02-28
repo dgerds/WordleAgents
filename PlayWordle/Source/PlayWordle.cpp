@@ -13,11 +13,13 @@
 
 namespace
 {
-    // transform the given string to uppercase
-    void ToUpper(std::string& str)
-    {
-        std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) { return std::toupper(c); });
-    }
+    // word length
+    // this is the only place the word length is defined, so can be easily changed to configuration if required
+    const int GAME_WORD_LENGTH = 5;
+
+    // max number of guesses allowed
+    // this is the only place the word length is defined, so can be easily changed to configuration if required
+    const int MAX_NUM_GUESSES = 6;
 
     // define the command line arguments
     struct Args
@@ -32,7 +34,7 @@ namespace
             // ensure the solutions are in uppercase
             for (auto& str : solution_list)
             {
-                ToUpper(str);
+                Game::ToUpper(str);
             }
         }
 
@@ -103,11 +105,17 @@ int main(int argc, char** argv)
     {
         // read the csv file
         CsvReader csv_reader("wordlist5.csv");
-        // for each item, ensure its uppercase and add it to the word list
-        for (auto item : csv_reader.GetContent())
+        // for each item, ensure its the right length and uppercase, then add it to the word list
+        for (const auto& item : csv_reader.GetContent())
         {
-            ToUpper(item);
-            word_list.push_back(item);
+            if (item.length() == GAME_WORD_LENGTH)
+            {
+                word_list.push_back(Game::ToUpperCopy(item));
+            }
+            else
+            {
+                throw std::runtime_error("Item in word list is not the correct length: " + item);
+            }
         }
     }
     catch (std::exception e)
@@ -118,7 +126,7 @@ int main(int argc, char** argv)
     std::cout << "Loaded word list: " << word_list.size() << std::endl;
     
     // sanity check any solutions provided on the command line are contained in the word list
-    for (auto& item : args->solution_list)
+    for (const auto& item : args->solution_list)
     {
         if (std::find(word_list.begin(), word_list.end(), item) == word_list.end())
         {
@@ -161,16 +169,11 @@ int main(int argc, char** argv)
         }
 
         // create a new game
-        Game game = Game(game_solution, 6, 300.0, 30.0, word_list);
+        Game game = Game(game_solution, MAX_NUM_GUESSES, word_list);
 
         // create a new player agent instance
         auto start_time = timer.GetCurrentTimeMs();
         auto agent = agent_factory->CreateAgent(game);
-        if (timer.GetCurrentTimeMs() - start_time > game.GetAgentInitialisationTimelimitMs())
-        {
-            std::cout << "### GAME OVER ### Player agent constructor initialisation exceeded time limit of " << game.GetAgentInitialisationTimelimitMs() << " ms" << std::endl;
-            return -3;
-        }
 
         // print the game header
         std::cout << "Game #" << (g + 1) << std::endl;
@@ -183,13 +186,7 @@ int main(int argc, char** argv)
             try
             {
                 // ask the agent to provide the next guess
-                start_time = timer.GetCurrentTimeMs();
                 game.ProcessGuess(agent->GetNextGuess());
-                if (timer.GetCurrentTimeMs() - start_time > game.GetAgentGuessTimelimitMs())
-                {
-                    std::cout << "### GAME OVER ### Player agent guess exceeded time limit of " << game.GetAgentGuessTimelimitMs() << " ms" << std::endl;
-                    return -4;
-                }
             }
             catch (std::exception e)
             {

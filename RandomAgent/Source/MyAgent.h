@@ -20,6 +20,9 @@ public:
     }
 
     // return the agent's next guess at the solution.
-    // note that this method must return within the games "agent guess timelimit" to avoid disqualification.
     virtual std::string GetNextGuess();
+
+private:
+
+    WordSet m_word_set;
 };

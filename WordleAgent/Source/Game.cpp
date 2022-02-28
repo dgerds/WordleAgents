@@ -7,19 +7,6 @@
 
 namespace
 {
-	// transform the given string to uppercase
-	void ToUpper(std::string& str)
-	{
-		std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) { return std::toupper(c); });
-	}
-
-	// get a copy of the given string transformed to uppercase
-	std::string ToUpperCopy(std::string str)
-	{
-		ToUpper(str);
-		return str;
-	}
-
 	// update the given game letters based on the given guess result
 	void UpdateGameLetters(GameLetters& game_letters, const GuessResult& gr)
 	{
@@ -73,18 +60,15 @@ GuessResult::GuessResult(const std::string& guess, const std::string& solution)
 // constructor
 Game::Game(const std::string& solution,
 		   int num_guesses,
-		   double agent_initialisation_timelimit_ms,
-		   double agent_guess_timelimit_ms,
 		   const WordList& word_list)
   : m_game_solved(false),
 	m_game_over_message(),
 	m_solution(ToUpperCopy(solution)),
 	m_num_guesses(num_guesses),
-	m_agent_initialisation_timelimit_ms(agent_initialisation_timelimit_ms),
-	m_agent_guess_timelimit_ms(agent_guess_timelimit_ms),
 	m_game_start_time_ms(0.0),
 	m_game_end_time_ms(0.0),
 	m_word_list(word_list),
+	m_word_set(word_list.begin(), word_list.end()),
 	m_timer()
 {
 	// initialise the game letters to 'not used'
@@ -135,8 +119,15 @@ bool Game::ProcessGuess(std::string guess)
 		m_game_start_time_ms = m_timer.GetCurrentTimeMs();
 	}
 
-	// sanity check the word is valid (ie: contained in the word list)
-	//TODO - if its not in the word list, then the player agent has missed this turn?
+	// sanity check the word is valid (ie: the correct length and contained in the word list)
+	if ((guess.length() != m_word_list[0].length()) ||
+		(m_word_set.find(guess) == m_word_set.end()))
+	{
+		// invalid word - this counts as a guess, but can't be useful as a guess
+		// otherwise players could cheat by using words like "aeiou".
+		// replace the guess with something useless of the correct length.
+		guess = std::string(m_word_list[0].length(), '*');
+	}
 
 	// add the guess to the list
 	m_game_table.push_back(GuessResult(guess, m_solution));
@@ -173,4 +164,21 @@ void Game::EndGame(const std::string& game_over_message)
 		m_game_over_message = game_over_message;
 	}
 }
+
+
+// transform the given string to uppercase
+void Game::ToUpper(std::string& str)
+{
+	std::transform(str.begin(), str.end(), str.begin(), [](unsigned char c) { return std::toupper(c); });
+}
+
+
+// return a copy of the given string transformed to uppercase
+std::string Game::ToUpperCopy(const std::string& str)
+{
+	std::string temp(str);
+	ToUpper(temp);
+	return temp;
+}
+
 

@@ -8,8 +8,7 @@ class MyAgentFactory
 {
 public:
 
-    // create my custom agent instance.
-    // note that this method must return within the games "agent initialisation timelimit" to void disqualification.
+    // create my custom agent instance
     virtual std::unique_ptr<Agent> CreateAgent(Game& game) const
     {
         return std::make_unique<MyAgent>(game);
