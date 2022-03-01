@@ -58,11 +58,6 @@ public:
         return m_game_end_time_ms > 0.0;
     }    
 
-    const std::string& GetGameOverMessage() const
-    {
-        return m_game_over_message;
-    }    
-
     // get the game time in milliseconds
     double GetGameTimeMs() const;
 
@@ -109,11 +104,6 @@ public:
     // returns true if the guess is correct, otherwise false
     bool ProcessGuess(std::string guess);
 
-    // end the game.
-    // stops the game time at the current time and sets the game over message.
-    // required to be public to handle corner cases like disqualification for taking too long.
-    void EndGame(const std::string& game_over_message);
-
     // transform the given string to uppercase
     static void ToUpper(std::string& str);
 
@@ -122,8 +112,11 @@ public:
 
 private:
 
+    // end the game.
+    // stops the game time at the current time.
+    void EndGame();
+
     bool m_game_solved;
-    std::string m_game_over_message;
     std::string m_solution;
     int m_num_guesses;
     double m_game_start_time_ms;

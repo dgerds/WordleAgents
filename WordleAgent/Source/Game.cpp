@@ -62,7 +62,6 @@ Game::Game(const std::string& solution,
 		   int num_guesses,
 		   const WordList& word_list)
   : m_game_solved(false),
-	m_game_over_message(),
 	m_solution(ToUpperCopy(solution)),
 	m_num_guesses(num_guesses),
 	m_game_start_time_ms(0.0),
@@ -139,30 +138,17 @@ bool Game::ProcessGuess(std::string guess)
 	if (guess == m_solution)
 	{
 		m_game_solved = true;
-		EndGame("Solved");
+		EndGame();
 
 	}
 	// else if, the agent has used all their guesses
 	else if (GetNumGuessesUsed() >= GetNumGuesses())
 	{
-		EndGame("Not solved and no guesses remaining.");
+		EndGame();
 	}
 
 	// return true if the guess was correct
 	return m_game_solved;
-}
-
-
-// end the game.
-// stops the game time at the current time and sets the game over message.
-// required to be public to handle corner cases like disqualification for taking too long.
-void Game::EndGame(const std::string& game_over_message)
-{
-	if (!IsGameOver())
-	{		
-		m_game_end_time_ms = GetGameTimeMs();
-		m_game_over_message = game_over_message;
-	}
 }
 
 
@@ -182,3 +168,12 @@ std::string Game::ToUpperCopy(const std::string& str)
 }
 
 
+// end the game.
+// stops the game time at the current time.
+void Game::EndGame()
+{
+	if (!IsGameOver())
+	{
+		m_game_end_time_ms = GetGameTimeMs();
+	}
+}

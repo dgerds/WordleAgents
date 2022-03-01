@@ -24,9 +24,9 @@ namespace
     // define the command line arguments
     struct Args
     {
-        Args(int num_games,
-            std::string plugin_filename,
-            std::vector<std::string> word_list)
+        Args(std::string plugin_filename,
+             int num_games,
+             std::vector<std::string> word_list)
             : num_games(num_games),
               plugin_filename(plugin_filename),
               solution_list(word_list)
@@ -63,10 +63,10 @@ namespace
     void PrintUsage()
     {        
         std::cout << std::endl;
-        std::cout << " Usage:    PlayWordle.exe num_games plugin_filename [solution_1 solution_2 solution_3 ... solution_n]" << std::endl;
+        std::cout << " Usage:    PlayWordle.exe plugin_filename num_games [solution_1 solution_2 solution_3 ... solution_n]" << std::endl;
         std::cout << std::endl;
-        std::cout << " Example:  PlayWordle.exe 5 MyGame.dll" << std::endl;
-        std::cout << " Example:  PlayWordle.exe 3 MyGame.dll PILOT APPLE SKILL" << std::endl;
+        std::cout << " Example:  PlayWordle.exe MyGame.dll 5" << std::endl;
+        std::cout << " Example:  PlayWordle.exe MyGame.dll 3 PILOT APPLE SKILL" << std::endl;
         std::cout << std::endl;
     }
 
@@ -77,7 +77,7 @@ namespace
         {
             throw std::runtime_error("Incorrect number of command line arguments");
         }
-        return std::make_unique<Args>(std::stoi(arg_vec[0]), arg_vec[1], std::vector<std::string>(arg_vec.begin() + 2, arg_vec.end()));
+        return std::make_unique<Args>(arg_vec[0], std::stoi(arg_vec[1]), std::vector<std::string>(arg_vec.begin() + 2, arg_vec.end()));
     }
 }
 
@@ -199,9 +199,14 @@ int main(int argc, char** argv)
         // print the game footer stats
         std::cout << " =========" << std::endl;
         std::cout << std::endl;
-        std::cout << "Game solution: " << game_solution << std::endl;
-        std::cout << "Game result:   " << game.GetGameOverMessage() << std::endl;
-        std::cout << "Game time:     " << game.GetGameTimeMs() << " ms" << std::endl;
+        if (game.IsGameSolved())
+        {
+            std::cout << "Solved with " << game.GetNumGuessesUsed() << " guesses in " << game.GetGameTimeMs() << " ms" << std::endl;
+        }
+        else
+        {
+            std::cout << "Not solved after " << game.GetNumGuessesUsed() << " guesses and " << game.GetGameTimeMs() << " ms [" << game_solution << "]" << std::endl;
+        }
         std::cout << std::endl;
         std::cout << "--------------------------------------------------" << std::endl;
         std::cout << std::endl;
