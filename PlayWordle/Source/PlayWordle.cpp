@@ -217,19 +217,22 @@ int main(int argc, char** argv)
 
     // calculate the states
     int overall_count = 0;
+    int overall_guesses = 0;
     double overall_ms = 0.0;
-    for (size_t i = 0; i < game_list.size(); i++)
+    for (const auto& game : game_list)
     {
-        if (game_list[i].IsGameSolved())
+        if (game.IsGameSolved())
         {
             overall_count++;
         }
-        overall_ms += game_list[i].GetGameTimeMs();
+        overall_guesses += game.GetNumGuessesUsed();
+        overall_ms += game.GetGameTimeMs();
     }
 
     // print the overall stats
-    std::cout << "Overall solved: " << overall_count << " of " << game_list.size() << std::endl;
-    std::cout << "Overall time:   " << overall_ms << " ms" << std::endl;
+    std::cout << "Overall solved:  " << overall_count << " of " << game_list.size() << std::endl;
+    std::cout << "Overall guesses: " << overall_guesses << std::endl;
+    std::cout << "Overall time:    " << overall_ms << " ms" << std::endl;
     std::cout << std::endl;
     std::cout << "--------------------------------------------------" << std::endl;
     std::cout << std::endl;

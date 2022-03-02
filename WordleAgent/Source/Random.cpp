@@ -10,7 +10,7 @@ namespace
     // seed the random number generator with a current time value
     int SeedRandomness()
     {
-        srand(static_cast<unsigned int>(Timer().GetCurrentTimeMs() * 10000));
+        srand(static_cast<unsigned int>(Timer().GetCurrentTimeMs() * 10000000));
         return 0;
     }
 }
