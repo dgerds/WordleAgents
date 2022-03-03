@@ -2,6 +2,8 @@
 
 Develop an intelligent agent that plays Wordle and challenge your friends for a bit of fun.
 
+Built using the free edition of Microsoft Visual Studio Community 2022.
+
 ## PickWords
 Executable which selects 'N' words from the list randomly. Useful for setting up a tournament where multiple player agents attempt to solve the same Wordle games.
 
