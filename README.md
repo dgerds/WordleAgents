@@ -23,8 +23,8 @@ When challenging your friends, the following guidelines are suggested:
 - Run the game for each agent passing those same sets of 5 words.
 - Keep the console output for all of the games and view side-by-side to compare strategies.
 - The winner of each challenge day is the player who solved the most games overall.
-- In case of a tied result, the winner is the player who used the least moves overall.
-- In case of a tied result, the winner is the player who used the least overall time.
+- In case of a tied result, the winner is the player who used the least moves overall in the solved games.
+- In case of a tied result, the winner is the player who used the least overall time in the solved games.
 - Hopefully players learn from each other and adapt their strategies over the tournament period.
 - The winner on the final challenge day is the tournament winner and gets cake.
 - Keep it fair and clean, no stack overflows or const cast hackery please.
