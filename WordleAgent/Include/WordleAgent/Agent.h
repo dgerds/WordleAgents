@@ -18,10 +18,6 @@ public:
         return m_game;
     }
 
-    // get the name of the agent.
-    // eg: "Einstein"
-    virtual std::string GetName() const = 0;
-
     // return the agent's next guess at the solution.
     virtual std::string GetNextGuess() = 0;
 
