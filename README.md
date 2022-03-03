@@ -27,4 +27,4 @@ When challenging your friends, the following guidelines are suggested:
 - In case of a tied result, the winner is the player who used the least overall time.
 - Hopefully players learn from each other and adapt their strategies over the tournament period.
 - The winner on the final challenge day is the tournament winner and gets cake.
-- Keep it fair and clean, no stackoverflows or reinterpret cast hackery please.
+- Keep it fair and clean, no stack overflows or const cast hackery please.
