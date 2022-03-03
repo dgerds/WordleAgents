@@ -34,6 +34,6 @@ All the standard rules of Wordle apply, and the results of your guess are provid
 
 There is however one rule that is applied slightly differently, and that's in regards to returning a guess that's not contained in the word list.
 
-If your agent guesses a word that's not in the list, this is treated as an invalid guess but still counts towards the guess limit. This approach has been taken to avoid providing useful feedback to agents who try and use invalid guesses for advantage, for example, the word "aeiou" is not valid but if processed would return useful information.
+If your agent guesses a word that's not in the list, this is treated as an invalid guess but still counts towards the guess limit. This approach is taken to avoid providing useful feedback to agents who try and use invalid guesses for advantage, for example, the word "aeiou" is not valid but if processed would return useful information.
 To avoid this, ensure your agent only returns words that are contained in the word list (just like the user interface for the real Wordle does).
 
