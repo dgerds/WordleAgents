@@ -41,14 +41,33 @@ GuessResult::GuessResult(const std::string& guess, const std::string& solution)
 	result.resize(guess.size());
 	for (size_t i = 0; i < guess.size(); i++)
 	{
+		// if (the guess character is in the exact correct position) then
 		if (guess[i] == solution[i])
 		{
 			result[i] = Colour::GREEN;
 		}
+		// if (the guess character is located in the word somewhere else) then
 		else if (solution.find(guess[i]) != std::string::npos)
 		{
-			result[i] = Colour::YELLOW;
+			// we need to check if all instances of the character in the solution have been guessed correctly
+			bool all_correct = true;
+			for (size_t j = 0; j < solution.size(); j++)
+			{
+				// if (this is an instance of the character in the solution)
+				if (solution[j] == guess[i])
+				{
+					// if (the guess was not correct for this character)
+					if (guess[j] != solution[j])
+					{
+						all_correct = false;
+						break;
+					}
+				}
+			}
+			// if (all instances have been found) then BLACK, else YELLOW
+			result[i] = all_correct ? Colour::BLACK : Colour::YELLOW;
 		}
+		// else (the guess character is not in the word at all)
 		else
 		{
 			result[i] = Colour::BLACK;
