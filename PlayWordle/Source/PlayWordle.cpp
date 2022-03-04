@@ -224,15 +224,15 @@ int main(int argc, char** argv)
         if (game.IsGameSolved())
         {
             overall_count++;
+            overall_guesses += game.GetNumGuessesUsed();
+            overall_ms += game.GetGameTimeMs();
         }
-        overall_guesses += game.GetNumGuessesUsed();
-        overall_ms += game.GetGameTimeMs();
     }
 
     // print the overall stats
-    std::cout << "Overall solved:  " << overall_count << " of " << game_list.size() << std::endl;
-    std::cout << "Overall guesses: " << overall_guesses << std::endl;
-    std::cout << "Overall time:    " << overall_ms << " ms" << std::endl;
+    std::cout << "Overall games solved:             " << overall_count << " of " << game_list.size() << std::endl;
+    std::cout << "Overall guesses for solved games: " << overall_guesses << std::endl;
+    std::cout << "Overall time for solved games:    " << overall_ms << " ms" << std::endl;
     std::cout << std::endl;
     std::cout << "--------------------------------------------------" << std::endl;
     std::cout << std::endl;
