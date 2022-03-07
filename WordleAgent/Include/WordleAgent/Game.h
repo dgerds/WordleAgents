@@ -97,7 +97,7 @@ public:
         {
             return &m_game_table[m_game_table.size() - 1];
         }
-        return 0;
+        return nullptr;
     }
 
     // progress an agents guess.
