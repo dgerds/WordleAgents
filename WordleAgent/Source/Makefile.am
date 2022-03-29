@@ -1,6 +1,6 @@
 SUBDIRS = 
 
-AM_CXXFLAGS = -I../Include
+AM_CXXFLAGS = -I$(top_srcdir)/WordleAgent/Include
 
 lib_LTLIBRARIES = libagent.la
 libagent_la_SOURCES = \
