@@ -9,7 +9,7 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 
-AC_CONFIG_SRCDIR([PickWords/PickWords.cpp])
+AC_CONFIG_SRCDIR([PickWords/Source/PickWords.cpp])
 AC_CONFIG_HEADERS([config.h])
 
 AC_CHECK_HEADERS([stdio.h])
