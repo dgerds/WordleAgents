@@ -1,7 +1,43 @@
 
 #include "WordleAgent/Timer.h"
 #include <stdexcept>
+#ifdef _WIN32
 #include <profileapi.h>
+#elif __linux__
+
+
+
+#include <stdint.h>
+
+typedef uint8_t BYTE;
+typedef uint32_t DWORD;
+typedef int32_t LONG;
+typedef int64_t LONGLONG;
+
+typedef union _LARGE_INTEGER {
+  struct {
+    DWORD LowPart;
+    LONG  HighPart;
+  };
+  struct {
+    DWORD LowPart;
+    LONG  HighPart;
+  } u;
+  LONGLONG QuadPart;
+} LARGE_INTEGER, *PLARGE_INTEGER;
+
+// for high resolution time stamps
+bool QueryPerformanceFrequency(LARGE_INTEGER *lpFrequency){
+  *lpFrequency = {0,0};
+  return true;
+}
+bool QueryPerformanceCounter(LARGE_INTEGER *lpPerformanceCount){
+  *lpPerformanceCount = {0,0};
+  return true;
+}
+
+
+#endif
 
 
 // constructor

@@ -1,1 +1,1 @@
-SUBDIRS = PickWords
+SUBDIRS = WordleAgent PickWords

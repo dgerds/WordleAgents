@@ -14,7 +14,10 @@ AC_CONFIG_HEADERS([config.h])
 AC_CHECK_HEADERS([stdio.h])
 
 AC_CONFIG_FILES([Makefile
+		 WordleAgent/Makefile
+		 WordleAgent/Source/Makefile
                  PickWords/Makefile
+                 PickWords/Source/Makefile
                  ])
 
 AC_OUTPUT
