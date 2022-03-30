@@ -18,6 +18,10 @@ AC_SEARCH_LIBS([ltdl])
 AC_CONFIG_FILES([Makefile
 		 WordleAgent/Makefile
 		 WordleAgent/Source/Makefile
+                 PlayWordle/Makefile
+                 PlayWordle/Source/Makefile
+                 RandomAgent/Makefile
+                 RandomAgent/Source/Makefile
                  PickWords/Makefile
                  PickWords/Source/Makefile
                  ])
