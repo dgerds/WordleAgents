@@ -20,6 +20,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PickWords", "PickWords\Pick
 		{91B79636-3ACC-493D-A411-162605F7A1C0} = {91B79636-3ACC-493D-A411-162605F7A1C0}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LastLine", "LastLine\LastLine.vcxproj", "{9F600663-1387-45B0-BB65-2EE0ABAC506A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -60,6 +62,14 @@ Global
 		{4F1CAB1D-2B9B-42BE-9DED-2DC9CD31BF95}.Release|x64.Build.0 = Release|x64
 		{4F1CAB1D-2B9B-42BE-9DED-2DC9CD31BF95}.Release|x86.ActiveCfg = Release|Win32
 		{4F1CAB1D-2B9B-42BE-9DED-2DC9CD31BF95}.Release|x86.Build.0 = Release|Win32
+		{9F600663-1387-45B0-BB65-2EE0ABAC506A}.Debug|x64.ActiveCfg = Debug|x64
+		{9F600663-1387-45B0-BB65-2EE0ABAC506A}.Debug|x64.Build.0 = Debug|x64
+		{9F600663-1387-45B0-BB65-2EE0ABAC506A}.Debug|x86.ActiveCfg = Debug|Win32
+		{9F600663-1387-45B0-BB65-2EE0ABAC506A}.Debug|x86.Build.0 = Debug|Win32
+		{9F600663-1387-45B0-BB65-2EE0ABAC506A}.Release|x64.ActiveCfg = Release|x64
+		{9F600663-1387-45B0-BB65-2EE0ABAC506A}.Release|x64.Build.0 = Release|x64
+		{9F600663-1387-45B0-BB65-2EE0ABAC506A}.Release|x86.ActiveCfg = Release|Win32
+		{9F600663-1387-45B0-BB65-2EE0ABAC506A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

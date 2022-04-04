@@ -236,5 +236,6 @@ int main(int argc, char** argv)
     std::cout << std::endl;
     std::cout << "--------------------------------------------------" << std::endl;
     std::cout << std::endl;
+    std::cout << "Summary: " << overall_count << "/" << game_list.size() << "|" << overall_guesses << "|" << overall_ms << " ms" << std::endl;
 }
 
