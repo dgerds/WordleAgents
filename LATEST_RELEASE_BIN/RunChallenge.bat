@@ -1,6 +1,9 @@
 @echo off
 
-set WORD_LIST=SMALL TREND LIONS FREED PILOT
+echo Picking words...
+PickWords.exe 5 > temp-file.tmp
+set /p WORD_LIST= < temp-file.tmp
+echo Word list: %WORD_LIST%
 
 for %%f in (*.dll) do (
     echo.
