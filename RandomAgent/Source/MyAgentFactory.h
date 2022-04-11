@@ -4,7 +4,7 @@
 
 
 // factory to create my custom agent
-class MyAgentFactory
+class MyAgentFactory : public AgentFactory
 {
 public:
 

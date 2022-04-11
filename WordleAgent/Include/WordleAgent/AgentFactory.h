@@ -7,6 +7,9 @@
 class AgentFactory
 {
 public:
+
+    // destructor
+    virtual ~AgentFactory() {}
     
     // create an agent instance.
     virtual std::unique_ptr<Agent> CreateAgent(Game &game) const = 0;

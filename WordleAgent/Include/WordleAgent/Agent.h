@@ -12,6 +12,9 @@ public:
     Agent(Game &game)
       : m_game(game) {}
 
+    // destructor
+    virtual ~Agent() {}
+
     // get a const reference to the current game.
     const Game& GetGame() const
     {

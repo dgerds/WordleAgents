@@ -31,6 +31,11 @@ namespace
               plugin_filename(plugin_filename),
               solution_list(word_list)
         {
+            // ensure the number of games is positive
+            if (num_games <= 0)
+            {
+                throw std::runtime_error("Invalid number of games (cannot be less than 1)");
+            }
             // ensure the solutions are in uppercase
             for (auto& str : solution_list)
             {
@@ -151,29 +156,59 @@ int main(int argc, char** argv)
     std::cout << "--------------------------------------------------" << std::endl;
     std::cout << std::endl;
 
+    // limit the number of games to the number of words in the word_list
+    const int NUM_GAMES = min(args->num_games, static_cast<int>(word_list.size()));
+
+    // generate the complete list of solutions
+    WordList solution_list;
+    // if (we are running through the entire word list) then
+    if (NUM_GAMES >= word_list.size())
+    {
+        // just copy the word list
+        solution_list = word_list;
+    }
+    else
+    {
+        // generate a unique subset of words from the word list
+        for (int g = 0; g < NUM_GAMES; g++)
+        {
+            // if (this word was provided on the command line) then
+            if (g < args->solution_list.size())
+            {
+                solution_list.push_back(args->solution_list[g]);
+            }
+            else 
+            {
+                // pick a word at random that's not already in the list.
+                // if we randomly pick a word that's already there, we'll have to try again, hence the "while (true)" loop
+                while (true)
+                {
+                    const auto& next_word = word_list[Random::GetRandomInt(0, static_cast<int>(word_list.size() - 1))];
+                    if (std::find(solution_list.begin(), solution_list.end(), next_word) == solution_list.end())
+                    {
+                        solution_list.push_back(next_word);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    // run the games
     Timer timer;
-    std::vector<Game> game_list;
-    for (int g = 0; g < args->num_games; g++)
+    int overall_solved_count = 0;
+    int overall_solved_guesses = 0;
+    double overall_solved_ms = 0.0;
+    for (int g = 0; g < NUM_GAMES; g++)
     {
         // pick the solution for the next game
-        std::string game_solution;
-        if (g < args->solution_list.size())
-        {
-            // from the command line arg list
-            game_solution = args->solution_list[g];
-        }
-        else
-        {
-            // pick a word at random from the word_list
-            game_solution = word_list[Random::GetRandomInt(0, static_cast<int>(word_list.size() - 1))];
-        }
+        const auto& GAME_SOLUTION = solution_list[g];
 
         // create a new game
-        Game game = Game(game_solution, MAX_NUM_GUESSES, word_list);
+        Game game = Game(GAME_SOLUTION, MAX_NUM_GUESSES, word_list);
 
         // create a new player agent instance
-        auto start_time = timer.GetCurrentTimeMs();
-        auto agent = agent_factory->CreateAgent(game);
+        auto agent = agent_factory->CreateAgent(game);       
 
         // print the game header
         std::cout << "Game #" << (g + 1) << std::endl;
@@ -205,37 +240,28 @@ int main(int argc, char** argv)
         }
         else
         {
-            std::cout << "Not solved after " << game.GetNumGuessesUsed() << " guesses and " << game.GetGameTimeMs() << " ms [" << game_solution << "]" << std::endl;
+            std::cout << "Not solved after " << game.GetNumGuessesUsed() << " guesses and " << game.GetGameTimeMs() << " ms [" << GAME_SOLUTION << "]" << std::endl;
         }
         std::cout << std::endl;
         std::cout << "--------------------------------------------------" << std::endl;
         std::cout << std::endl;
 
-        // add this game to the completed list
-        game_list.push_back(game);
-    }
-
-    // calculate the states
-    int overall_count = 0;
-    int overall_guesses = 0;
-    double overall_ms = 0.0;
-    for (const auto& game : game_list)
-    {
+        // add these game stats to the results
         if (game.IsGameSolved())
         {
-            overall_count++;
-            overall_guesses += game.GetNumGuessesUsed();
-            overall_ms += game.GetGameTimeMs();
+            overall_solved_count++;
+            overall_solved_guesses += game.GetNumGuessesUsed();
+            overall_solved_ms += game.GetGameTimeMs();
         }
     }
 
     // print the overall stats
-    std::cout << "Overall games solved:             " << overall_count << " of " << game_list.size() << std::endl;
-    std::cout << "Overall guesses for solved games: " << overall_guesses << std::endl;
-    std::cout << "Overall time for solved games:    " << overall_ms << " ms" << std::endl;
+    std::cout << "Overall games solved:             " << overall_solved_count << " of " << NUM_GAMES << std::endl;
+    std::cout << "Overall guesses for solved games: " << overall_solved_guesses << std::endl;
+    std::cout << "Overall time for solved games:    " << overall_solved_ms << " ms" << std::endl;
     std::cout << std::endl;
     std::cout << "--------------------------------------------------" << std::endl;
     std::cout << std::endl;
-    std::cout << "Summary: " << overall_count << "/" << game_list.size() << "|" << overall_guesses << "|" << overall_ms << " ms" << std::endl;
+    std::cout << "Summary: " << overall_solved_count << "/" << NUM_GAMES << "|" << overall_solved_guesses << "|" << overall_solved_ms << " ms" << std::endl;
 }
 
