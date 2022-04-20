@@ -8,18 +8,18 @@
 namespace
 {
 	// update the given game letters based on the given guess result
-	void UpdateGameLetters(GameLetters& game_letters, const GuessResult& gr)
+	void UpdateGameLetters(GameLetters& game_letters, const std::string& guess, const std::vector<Colour>& result)
 	{
-		for (size_t i = 0; i < gr.guess.size(); i++)
+		for (size_t i = 0; i < guess.size(); i++)
 		{
-			auto iter = game_letters.find(gr.guess[i]);
+			auto iter = game_letters.find(guess[i]);
 			if (iter != game_letters.end())
 			{
 				// if (the result for this letter is "better" than the current game_letters result) then
-				if (gr.result[i] < iter->second)
+				if (result[i] < iter->second)
 				{
 					// update the game_letters result
-					iter->second = gr.result[i];
+					iter->second = result[i];
 				}
 			}
 		}
@@ -28,8 +28,9 @@ namespace
 
 
 // constructor
-GuessResult::GuessResult(const std::string& guess, const std::string& solution)
-	: guess(guess)
+GuessResult::GuessResult(const std::string& guess, const std::string& solution, const GameLetters& game_letters)
+	: guess(guess),
+	  letters(game_letters)
 {
 	// sanity check guess and solution are the same size
 	if (guess.length() != solution.length())
@@ -73,6 +74,9 @@ GuessResult::GuessResult(const std::string& guess, const std::string& solution)
 			result[i] = Colour::BLACK;
 		}
 	}
+
+	// update the game letters based on guess and result calculated above
+	UpdateGameLetters(letters, guess, result);
 }
 
 
@@ -148,10 +152,10 @@ bool Game::ProcessGuess(std::string guess)
 	}
 
 	// add the guess to the list
-	m_game_table.push_back(GuessResult(guess, m_solution));
+	m_game_table.push_back(GuessResult(guess, m_solution, m_game_letters));
 
 	// update the game letters based on the guess result
-	UpdateGameLetters(m_game_letters, m_game_table.back());
+	m_game_letters = m_game_table.back().letters;
 
 	// if the guess is correct
 	if (guess == m_solution)

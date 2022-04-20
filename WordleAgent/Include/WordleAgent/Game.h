@@ -13,20 +13,21 @@ enum class Colour
 };
 
 
+typedef std::map<char, Colour> GameLetters;
+
+
 struct GuessResult
 {
     // constructor
-    GuessResult(const std::string& guess, const std::string& solution);
+    GuessResult(const std::string& guess, const std::string& solution, const GameLetters& game_letters);
 
     std::string guess;
     std::vector<Colour> result;
+    GameLetters letters;
 };
 
 
 typedef std::vector<GuessResult> GameTable;
-
-
-typedef std::map<char, Colour> GameLetters;
 
 
 typedef std::vector<std::string> WordList;

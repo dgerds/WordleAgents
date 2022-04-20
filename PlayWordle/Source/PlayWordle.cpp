@@ -48,12 +48,12 @@ namespace
         std::vector<std::string> solution_list;
     };    
 
-    void PrintGuessResultAndLetters(const GuessResult& gr, const GameLetters& gl)
+    void PrintGuessResultAndLetters(const GuessResult& gr)
     {
         std::cout << " | ";
         OutputHelper::Print(gr);
         std::cout << " | ";
-        OutputHelper::Print(gl);
+        OutputHelper::Print(gr.letters);
         std::cout << std::endl;
     }
 
@@ -228,7 +228,12 @@ int main(int argc, char** argv)
                 std::cout << "### ERROR ### " << e.what() << std::endl;
                 return -5;
             }
-            PrintGuessResultAndLetters(game.GetGameTable().back(), game.GetGameLetters());
+        }
+
+        // print out the game moves after the game has completed
+        for (auto const& gt : game.GetGameTable())
+        {
+            PrintGuessResultAndLetters(gt);
         }
 
         // print the game footer stats
