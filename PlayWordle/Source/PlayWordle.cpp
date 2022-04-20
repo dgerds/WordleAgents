@@ -54,7 +54,7 @@ namespace
         OutputHelper::Print(gr);
         std::cout << " | ";
         OutputHelper::Print(gr.letters);
-        std::cout << std::endl;
+        std::cout << " |" << std::endl;
     }
 
     void PrintHeader()
