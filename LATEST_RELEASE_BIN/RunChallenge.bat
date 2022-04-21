@@ -10,14 +10,18 @@ set /p WORD_LIST= < temp-file.tmp
 echo.
 echo Word list: %WORD_LIST%
 del temp-file.tmp
+if exist agent-complete.tmp del agent-complete.tmp
 
 for %%f in (*.dll) do (
     echo.
     echo -----------------------------------------------------
     echo.
     echo Next player: %%~nf
-    timeout 5
     start "%%~nf" RunAgent.bat %%~nf
+    echo.
+    echo Waiting for agent to complete game...
+    call WaitForFile.bat agent-complete.tmp
+    del agent-complete.tmp
 )
 echo.
 echo -----------------------------------------------------
