@@ -1,7 +1,19 @@
 
-#include "WordleAgent\AgentFactoryDll.h"
+#include "WordleAgent/AgentFactoryDll.h"
 #include <stdexcept>
 
+#ifdef _WIN32
+#elif __linux__
+#define __stdcall 
+typedef int HINSTANCE;
+typedef int HMODULE;
+HMODULE LoadLibrary(const char *libFileName) {
+  return 0;
+}
+void* GetProcAddress(HMODULE id, const char *func) {
+  return 0;
+}
+#endif
 
 namespace
 {

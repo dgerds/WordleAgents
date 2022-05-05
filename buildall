@@ -1,0 +1,19 @@
+#!/bin/sh -xe
+VPATH=$1
+CWD=`pwd`
+
+autoreconf -i
+
+if [ -n "$VPATH" ]
+then
+  echo "Setting VPATH $VPATH"
+  mkdir -p $VPATH
+  pushd $VPATH
+else
+  echo "no VPATH $VPATH"
+fi
+
+$CWD/configure --prefix=`pwd`/install
+
+make
+make distcheck 

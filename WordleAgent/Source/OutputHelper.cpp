@@ -1,6 +1,20 @@
 #include "WordleAgent/OutputHelper.h"
 #include <iostream>
 
+#ifdef _WIN32
+#elif __linux__
+
+// Console API Functions
+const int STD_OUTPUT_HANDLE = 1;
+int GetStdHandle(int handle) {
+  return 0;
+}
+bool SetConsoleTextAttribute(int handle, int attributes) {
+  return true;
+}
+
+#endif
+
 
 namespace
 {
